@@ -4,16 +4,17 @@ provider:
     name: aws
     region: us-east-1  # It is critical that this be the correct region.
     runtime: provided.al2
-    lambdaHashingVersion: 20201221
     deploymentBucket:
       name: lambda-functions-with-serverless-framework-<your-aws-account-number>  # This will be the "root" S3 bucket. Must be the same region as above.
     memorySize: 128  # Default is 1024. See https://aws.amazon.com/lambda/pricing/.
-    iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - "sns:Publish"
-        - "sns:SetSMSAttributes"
-      Resource: "*"
+    iam:
+      role:
+        statements:
+          - Effect: 'Allow'
+            Action:
+             - "sns:Publish"
+             - "sns:SetSMSAttributes"
+            Resource: "*"   
 
 plugins:
     - ./vendor/bref/bref
@@ -30,5 +31,5 @@ functions:
 
 # Exclude files from deployment
 package:
-    exclude:
-        - 'node_modules/**'
+    patterns:
+        - '!node_modules/**'     
